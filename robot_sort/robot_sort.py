@@ -59,6 +59,9 @@ class SortingRobot:
         # Swap the held item with the list item at the robot's position
         self._item, self._list[self._position] = self._list[self._position], self._item
 
+    def pickup(self):
+        self._item = self._list[self._position]
+
     def compare_item(self):
         """
         Compare the held item with the item in front of the robot:
@@ -91,13 +94,38 @@ class SortingRobot:
         Returns True if the robot's light is on and False otherwise.
         """
         return self._light == "ON"
+    # def reset(self):
+    #     while self.can_move_left:
+    #         self.move_left()
 
     def sort(self):
         """
         Sort the robot's list.
         """
-        # Fill this out
-        pass
+        n = len(self._list)
+        for i in range(n):
+            while self.can_move_left():
+                self.move_left()
+            # self.set_light_on()
+            self.pickup()
+            for j in range(n - i - 1):
+                if self.can_move_right():
+                    self.move_right()
+                if self.compare_item() == 1:
+                    self.swap_item()
+                    # print("CURRENT ITEM")
+                    # print(self._item)
+                    self.move_left()
+                    self.swap_item()
+                    self.move_right()
+                    self.set_light_off()
+                else:
+                    self.pickup()
+
+            # if self.light_is_on:
+            #     break
+        
+        return self._list
 
 
 if __name__ == "__main__":
